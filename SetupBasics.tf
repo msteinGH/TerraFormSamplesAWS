@@ -1,10 +1,10 @@
 
 provider "aws" {
 
-	region 		= "us-east-1"
-  #region 		= "${var.region}"
-	access_key 	= "AKIAV33XBRPRA6M2YP44" 
-	secret_key 	= "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"
+	#region 		= "us-east-1"
+  region 		= "${var.region}"
+	access_key 	= "AKIA3B5ZPCGXFUZVIRPD" 
+	secret_key 	= "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"
 
 }
 
@@ -90,6 +90,43 @@ resource "aws_security_group" "tf-allow-ssh" {
   }
 }
 
+
+
+# set up EC2 instance
+# WORKING!!
+resource "aws_instance" "my-first-tf-instance" {
+
+	ami = "ami-0b5eea76982371e91" 
+	instance_type = "t2.micro"
+	key_name = "tf-generic-user-key"
+	# either subnet ID or network interface can be specified
+	# interface cannot be specified together with pupblic IP
+	# network_interface_id = aws_network_interface.tf_generic_network_interface.id
+  subnet_id       = aws_subnet.tf-generic-subnet.id
+	associate_public_ip_address = "true"
+  vpc_security_group_ids = [aws_security_group.tf-allow-ssh.id]
+	
+	tags = {
+		Name = "my-first-tf-instance"
+	}
+}
+
+# working fine, incl. SSH access, java installation via user_data
+#resource "aws_instance" "my-first-tf-instance-with-ssh-user-data-file" {
+#
+#	ami = "ami-0b5eea76982371e91" 
+#	instance_type = "t2.micro"
+#	key_name = "tf-generic-user-key"
+# subnet_id = aws_subnet.tf-generic-subnet.id
+# security_groups = [aws_security_group.tf-allow-ssh.id]
+#	associate_public_ip_address = "true"
+#  user_data = "${file("user_data.sh")}"
+#	tags = {
+#		Name = "my-first-tf-instance-with-ssh-user-data-file"
+#	}
+#}
+
+
 #resource "aws_ebs_volume" "tf-my-ebs-volume" {
 #  availability_zone = "us-east-1a"
   # size in GB
@@ -129,43 +166,8 @@ resource "aws_security_group" "tf-allow-ssh" {
 #	}
 #}
 
-
-# set up EC2 instance
-# WORKING!!
-resource "aws_instance" "my-first-tf-instance" {
-
-	ami = "ami-0b5eea76982371e91" 
-	instance_type = "t2.micro"
-	key_name = "tf-generic-user-key"
-	# either subnet ID or network interface can be specified
-	# interface cannot be specified together with pupblic IP
-	# network_interface_id = aws_network_interface.tf_generic_network_interface.id
-  subnet_id       = aws_subnet.tf-generic-subnet.id
-	associate_public_ip_address = "true"
-  vpc_security_group_ids = [aws_security_group.tf-allow-ssh.id]
-	
-	tags = {
-		Name = "my-first-tf-instance"
-	}
-}
-
-# working fine, incl. SSH access, java installation via user_data
-#resource "aws_instance" "my-first-tf-instance-with-ssh-user-data-file" {
-#
-#	ami = "ami-0b5eea76982371e91" 
-#	instance_type = "t2.micro"
-#	key_name = "tf-generic-user-key"
-# subnet_id = aws_subnet.tf-generic-subnet.id
-# security_groups = [aws_security_group.tf-allow-ssh.id]
-#	associate_public_ip_address = "true"
-#  user_data = "${file("user_data.sh")}"
-#	tags = {
-#		Name = "my-first-tf-instance-with-ssh-user-data-file"
-#	}
-#}
-
-
 # create an S3 bucket 
+# not working/timing out in the past -> NOW working 20230209
 
 resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
   bucket = "tf-my-first-aws-s3-bucketa"
