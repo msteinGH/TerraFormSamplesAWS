@@ -2,18 +2,18 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIARMW4246QDFDY7MXB" 
-	secret_key 	= "FbNjqVZD3+PIwF746doVRJsvscT/WRNNMnIGf+/H"
+	access_key 	= "AKIAV33XBRPRM5PJVDFZ" 
+	secret_key 	= "Tie8FTBbb1ps0YxSPILBTxXhaZyjZahIKUxH9d7/"
 
 }
 
-
-module "sample_ec2_instances_with_user_data" {
-  source = "./SampleModule"
-  subnet = aws_subnet.tf-generic-subnet.id
-  security_group = aws_security_group.tf-allow-ssh.id
-  key_name = "tf-generic-user-key"
-}
+# slowing down individual executions
+# module "sample_ec2_instances_with_user_data" {
+#  source = "./SampleModule"
+#  subnet = aws_subnet.tf-generic-subnet.id
+#  security_group = aws_security_group.tf-allow-ssh.id
+#  key_name = "tf-generic-user-key"
+#}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
@@ -123,24 +123,23 @@ resource "aws_instance" "my-first-tf-instance" {
 
 resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
   bucket = "tf-my-first-aws-s3-bucketa"
-
   tags = {
     Name        = "${var.bucket_name}"
   }
 }
 
-resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket-acl" {
+resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket_acl" {
   bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
   # acl    = "private"
    acl    = "public-read"
 }
 
 # Upload test file to S3 bucket
-resource "aws_s3_bucket_object" "tf_generically_uploaded_file" {
+resource "aws_s3_object" "tf-generically-uploaded-file" {
 
   bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-  key    = "profile"
-    # acl    = "private"
+  key    = "S3BucketTestFile.txt"
+  # acl    = "private"
    acl    = "public-read" 
    source = "./S3BucketTestFile.txt"
 
@@ -148,20 +147,22 @@ resource "aws_s3_bucket_object" "tf_generically_uploaded_file" {
 
 }
 
-# create folder in S3 bucket
-resource "aws_s3_bucket_object" "s3_folder" {
+# create empty folder in S3 bucket
+resource "aws_s3_object" "tf-my-test-upload-folder-name" {
     provider = aws
     bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-    # acl    = "private"
     acl    = "public-read" 
-    key      =  "tf_my_test_upload_folder_name"
-    content_type = "application/x-directory"
+    key    = "tf-my-test-upload-folder-name/"
+    # content_type seemingly irrelevant 
+    # trailing "/" seems to be sole indicator to create a folder
+    # content_type = "application/x-directory"
 }
 
-resource "aws_s3_bucket_object" "tf_my_generically_uploaded_files" {
+# create folder and upload files into it in one go
+resource "aws_s3_object" "tf-my-test-upload-folder-name-incl-files" {
 for_each = fileset("TestFilesForUpload/", "*")
 bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-key = each.value
+key    = "tf-my-test-upload-folder-name-incl-files/${each.value}"
 source = "TestFilesForUpload/${each.value}"
 
 etag = filemd5("TestFilesForUpload/${each.value}")
@@ -169,9 +170,10 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 
 
 
+
 # TODOS
 # PARAMETERIZE   
-# 
+# password/certificate reomval??
 # public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArt3ogLZPTxqC8AnyHmh+8fdDD0fqRLoW9p0G066ZTWSpDgOtf1gz9t2CUvzhzThtmSC7INMNV44NQho7AkuU6JuV7m/JC1qcqpqDM38k0+dFvrnKvVozOKZbTwfGeNNCaeC4GEdiCanyBIfK5JfaTCiHQQSS125HXo5nPpVhMQ3nfuYNFjtYDaPueclWKs3+O9F4ukGWZ+YAYDmUtbMBJJ+nonSyAcBqAYX+P+DWimNs56Dkf1LcSqoLZrs+AH71Z9EEdC1V7OXESoNEQObU4k71hhf0dA5f8XBF3JPI3esVYiHXqOWtgv3WzGTW2yyy7ZV+ir5Y66Xl8bGpkoXH7w=="
 
 
@@ -210,14 +212,13 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 # -- any good/worthwhile learning?
 # - k8s not from OReilly
 # -- Control PLane
-# -- differene EKS, ECS, Autoscaling
 # - cloudwatch
 # -- log into S3?? 
 # -- free??
 # checkout DDOS Protections
 # checkout Route53 
-# parameterize in general
-# - Region / AZ
-# - check on xxx.tfvars script
-# - passwords
-# - certificate??
+# GIT / GITHub
+# - Pull Requests
+# - branches
+# - different users
+
