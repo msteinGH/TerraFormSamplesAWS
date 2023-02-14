@@ -119,8 +119,6 @@ resource "aws_instance" "my-first-tf-instance" {
 }
 
 # create an S3 bucket 
-# not working/timing out in the past -> NOW working 20230209
-
 resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
   bucket = "tf-my-first-aws-s3-bucketa"
   tags = {
