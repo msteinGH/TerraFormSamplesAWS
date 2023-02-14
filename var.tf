@@ -9,4 +9,10 @@ variable "availability_zone" {
     default = "us-east-1a"
 }
 
-variable "bucket_name" {}
+variable "bucket_name" {
+    default = "mynewbucket1234"
+}
+
+# no default asking for value on command line
+#variable "bucket_name" {}
+

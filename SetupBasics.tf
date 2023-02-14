@@ -3,11 +3,18 @@ provider "aws" {
 
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIA3B5ZPCGXFUZVIRPD" 
-	secret_key 	= "GJX0HbNz5Je2DpaPZ9NV0Wpl19pwImIG1kXZWvUu"
+	access_key 	= "AKIARMW4246QDFDY7MXB" 
+	secret_key 	= "FbNjqVZD3+PIwF746doVRJsvscT/WRNNMnIGf+/H"
 
 }
 
+
+module "sample_ec2_instances_with_user_data" {
+  source = "./SampleModule"
+  subnet = aws_subnet.tf-generic-subnet.id
+  security_group = aws_security_group.tf-allow-ssh.id
+  key_name = "tf-generic-user-key"
+}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
@@ -26,6 +33,7 @@ resource "aws_vpc" "tf-generic-vpc" {
 # create subnet
 resource "aws_subnet" "tf-generic-subnet" {
   vpc_id            = aws_vpc.tf-generic-vpc.id
+
   cidr_block        = "10.0.1.0/24"
   availability_zone = "${var.availability_zone}"
 
@@ -111,61 +119,6 @@ resource "aws_instance" "my-first-tf-instance" {
 	}
 }
 
-# working fine, incl. SSH access, java installation via user_data
-#resource "aws_instance" "my-first-tf-instance-with-ssh-user-data-file" {
-#
-#	ami = "ami-0b5eea76982371e91" 
-#	instance_type = "t2.micro"
-#	key_name = "tf-generic-user-key"
-# subnet_id = aws_subnet.tf-generic-subnet.id
-# security_groups = [aws_security_group.tf-allow-ssh.id]
-#	associate_public_ip_address = "true"
-#  user_data = "${file("user_data.sh")}"
-#	tags = {
-#		Name = "my-first-tf-instance-with-ssh-user-data-file"
-#	}
-#}
-
-
-#resource "aws_ebs_volume" "tf-my-ebs-volume" {
-#  availability_zone = "us-east-1a"
-  # size in GB
-#  size              = 13
-#  tags = {
-#    Name = "tf-my-ebs-volume"
-#  }
-#}
-
-#resource "aws_volume_attachment" "tf-my-ebs-volume-attachment" {
-#  device_name = "/dev/sdh"
-#  volume_id   = aws_ebs_volume.tf-my-ebs-volume.id
-#  instance_id = aws_instance.my-first-tf-instance-user-data.id
-#}
-
-# working fine, SSH access, java installation, mounting EBS volume via user_data
-#resource "aws_instance" "my-first-tf-instance-user-data" {
-#
-#	ami = "ami-0b5eea76982371e91" 
-#	instance_type = "t2.micro"
-#	key_name = "tf-generic-user-key"
-# subnet_id = aws_subnet.tf-generic-subnet.id
-#  security_groups = [aws_security_group.tf-allow-ssh.id]
-#	associate_public_ip_address = "true"
-  # yum mmay fail if outbound http(s) calls are restricted via security group!!!
-#  user_data = <<-EOF
-#            #!/bin/bash
-#            sudo yum update -y
-#            sudo yum install -y java-1.8.0-openjdk.x86_64
-#            sudo mkfs -t xfs /dev/sdh
-#            sudo mkdir /mynewvolume
-#            sudo mount /dev/sdh /mynewvolume
-#            sudo yum install -y tomcat.noarch
-#            EOF
-#	tags = {
-#		Name = "my-first-tf-instance-user-data"
-#	}
-#}
-
 # create an S3 bucket 
 # not working/timing out in the past -> NOW working 20230209
 
@@ -174,7 +127,6 @@ resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
 
   tags = {
     Name        = "${var.bucket_name}"
-   # Environment = "Dev"
   }
 }
 
@@ -184,6 +136,39 @@ resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket-acl" {
    acl    = "public-read"
 }
 
+# Upload test file to S3 bucket
+resource "aws_s3_bucket_object" "tf_generically_uploaded_file" {
+
+  bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
+  key    = "profile"
+    # acl    = "private"
+   acl    = "public-read" 
+   source = "./S3BucketTestFile.txt"
+
+  etag = filemd5("S3BucketTestFile.txt")
+
+}
+
+# create folder in S3 bucket
+resource "aws_s3_bucket_object" "s3_folder" {
+    provider = aws
+    bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
+    # acl    = "private"
+    acl    = "public-read" 
+    key      =  "tf_my_test_upload_folder_name"
+    content_type = "application/x-directory"
+}
+
+resource "aws_s3_bucket_object" "tf_my_generically_uploaded_files" {
+for_each = fileset("TestFilesForUpload/", "*")
+bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
+key = each.value
+source = "TestFilesForUpload/${each.value}"
+
+etag = filemd5("TestFilesForUpload/${each.value}")
+}
+
+
 
 # TODOS
 # PARAMETERIZE   
@@ -192,6 +177,10 @@ resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket-acl" {
 
 
 # CHECK DSF real thing
+# - S3
+# -- working from OReilly? -> YES
+# -- use for logging? 
+# -- access from 
 # setup IAM user and roles and groups
 # -- difference role group permission
 # check autoscaling ECS, EKS
@@ -212,9 +201,7 @@ resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket-acl" {
 # check which packages generally available via yum
 # - Terraform???? makes sense?
 # - Ansible??
-# access other services 
-# - S3
-# -- working from OReilly?
+# access other services
 # - Free RDS(?))
 # -- NOPE not from OReilly
 # -- set up Tomcat
