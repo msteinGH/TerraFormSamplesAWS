@@ -10,9 +10,6 @@ provider "aws" {
 # S3 bucket samples
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
-  #subnet = aws_subnet.tf-generic-subnet.id
-  #security_group = aws_security_group.tf-allow-ssh.id
-  #key_name = "tf-generic-user-key"
   bucket_name = "my_new_bucket_name_from_wrapper_call"
 }
 
