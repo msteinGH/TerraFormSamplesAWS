@@ -182,6 +182,7 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 # -- access from 
 # setup IAM user and roles and groups
 # -- difference role group permission
+# have webapp D/L from GitHub and deployed into Tomcat  
 # check autoscaling ECS, EKS
 # https://www.reddit.com/r/aws/comments/mqbcg3/difference_between_eks_ecs_and_autoscaling_for_a/
 # check EKS not from oreilly
@@ -206,10 +207,11 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 # -- set up Tomcat
 # -- connect to PostgresSQL DB RDS via user_data.sh
 # - DynamoDB not from OReilly
-# -- NOSSQL DB
+# -- NOSQL DB
 # -- any good/worthwhile learning?
 # - k8s not from OReilly
-# -- Control PLane
+# 
+# -- Control PLane??
 # - cloudwatch
 # -- log into S3?? 
 # -- free??
@@ -219,4 +221,6 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 # - Pull Requests
 # - branches
 # - different users
+# - create Repo for downloading stuff
+# -- with credentials? D/L user?
 
