@@ -1,8 +1,5 @@
 
 
-
-
-
 # working fine, incl. SSH access, java installation via user_data
  resource "aws_instance" "my-first-tf-instance-with-ssh-user-data-file" {
 

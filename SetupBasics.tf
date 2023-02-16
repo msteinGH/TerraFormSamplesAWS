@@ -2,18 +2,29 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIAV33XBRPRM5PJVDFZ" 
-	secret_key 	= "Tie8FTBbb1ps0YxSPILBTxXhaZyjZahIKUxH9d7/"
+	access_key 	= "AKIAZ57YAL2ORSN5RC2U" 
+	secret_key 	= "7CvsAc/3cKLAP2yT9w74/6BnkMNCSPle7IqAJKi0"
 
 }
 
+# S3 bucket samples
+  module "sample_s3_bucket_with_uploaded_data" {
+  source = "./Modules/S3"
+  #subnet = aws_subnet.tf-generic-subnet.id
+  #security_group = aws_security_group.tf-allow-ssh.id
+  #key_name = "tf-generic-user-key"
+  bucket_name = "my_new_bucket_name_from_wrapper_call"
+}
+
+
+
 # slowing down individual executions
-# module "sample_ec2_instances_with_user_data" {
-#  source = "./SampleModule"
-#  subnet = aws_subnet.tf-generic-subnet.id
-#  security_group = aws_security_group.tf-allow-ssh.id
-#  key_name = "tf-generic-user-key"
-#}
+  module "sample_ec2_instances_with_user_data" {
+  source = "./Modules/EC2"
+  subnet = aws_subnet.tf-generic-subnet.id
+  security_group = aws_security_group.tf-allow-ssh.id
+  key_name = "tf-generic-user-key"
+}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
@@ -116,54 +127,6 @@ resource "aws_instance" "my-first-tf-instance" {
 	tags = {
 		Name = "my-first-tf-instance"
 	}
-}
-
-# create an S3 bucket 
-resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
-  bucket = "tf-my-first-aws-s3-bucketa"
-  tags = {
-    Name        = "${var.bucket_name}"
-  }
-}
-
-resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket_acl" {
-  bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-  # acl    = "private"
-   acl    = "public-read"
-}
-
-# Upload test file to S3 bucket
-resource "aws_s3_object" "tf-generically-uploaded-file" {
-
-  bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-  key    = "S3BucketTestFile.txt"
-  # acl    = "private"
-   acl    = "public-read" 
-   source = "./S3BucketTestFile.txt"
-
-  etag = filemd5("S3BucketTestFile.txt")
-
-}
-
-# create empty folder in S3 bucket
-resource "aws_s3_object" "tf-my-test-upload-folder-name" {
-    provider = aws
-    bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-    acl    = "public-read" 
-    key    = "tf-my-test-upload-folder-name/"
-    # content_type seemingly irrelevant 
-    # trailing "/" seems to be sole indicator to create a folder
-    # content_type = "application/x-directory"
-}
-
-# create folder and upload files into it in one go
-resource "aws_s3_object" "tf-my-test-upload-folder-name-incl-files" {
-for_each = fileset("TestFilesForUpload/", "*")
-bucket = aws_s3_bucket.tf-my-first-aws-s3-bucketa.id
-key    = "tf-my-test-upload-folder-name-incl-files/${each.value}"
-source = "TestFilesForUpload/${each.value}"
-
-etag = filemd5("TestFilesForUpload/${each.value}")
 }
 
 
