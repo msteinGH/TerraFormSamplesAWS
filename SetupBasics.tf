@@ -210,7 +210,6 @@ etag = filemd5("TestFilesForUpload/${each.value}")
 # -- NOSQL DB
 # -- any good/worthwhile learning?
 # - k8s not from OReilly
-# 
 # -- Control PLane??
 # - cloudwatch
 # -- log into S3?? 
