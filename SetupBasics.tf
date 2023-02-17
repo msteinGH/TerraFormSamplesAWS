@@ -2,12 +2,13 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIAZ57YAL2ORSN5RC2U" 
-	secret_key 	= "7CvsAc/3cKLAP2yT9w74/6BnkMNCSPle7IqAJKi0"
+	access_key 	= "AKIA4MBGRVSLDYIETAEP" 
+	secret_key 	= "x36wVjlKuwI65JfVETOS/1AydlNYDcbBGK+SUK7+"
 
 }
 
 # S3 bucket samples
+# WORKING with BASIC 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
   bucket_name = "my_new_bucket_name_from_wrapper_call"
