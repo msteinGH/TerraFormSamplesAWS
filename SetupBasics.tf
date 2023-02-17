@@ -2,13 +2,14 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIA4MBGRVSLDYIETAEP" 
-	secret_key 	= "x36wVjlKuwI65JfVETOS/1AydlNYDcbBGK+SUK7+"
+	access_key 	= "AKIA4NUEFO7KCBU5OOW5" 
+	secret_key 	= "zibfGUNbf5jl+LNXm7+avw++4Dt55FuxC+SfjKyf"
 
 }
 
 # S3 bucket samples
-# WORKING with BASIC 
+# WORKING with Basic Linux VM Oreilly example 
+# or ONLY the FIRST one??
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
   bucket_name = "my_new_bucket_name_from_wrapper_call"
