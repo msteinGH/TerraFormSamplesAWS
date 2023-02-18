@@ -2,14 +2,15 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIAU7KX6KHGZ2DXZDYH" 
-	secret_key 	= "HKYXUtxniwI6Oh8c+2LLElp0A1fjCdR86jLy0Ej9"
+	access_key 	= "AKIAUXRM7RLSDVFHQBDJ" 
+	secret_key 	= "I09DSvvyNgb9kNWgYyJkCh5SKFUkWXRMPqEZpJ/W"
 
 }
 
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
 # or ONLY the FIRST one??-> SEEMINGLY YES!!!
+# working again after first ACcoutn has timed out/ after 60 minutes??
 # does NOT work with OReilly SSH, Apache, EBS, Snapshot,Security Groups, Custom AMI assignment/course, lacking permissions!!
 # DOES work with ?? assignment 
   module "sample_s3_bucket_with_uploaded_data" {
