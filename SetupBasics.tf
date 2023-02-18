@@ -2,16 +2,16 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIA4NUEFO7KCBU5OOW5" 
-	secret_key 	= "zibfGUNbf5jl+LNXm7+avw++4Dt55FuxC+SfjKyf"
+	access_key 	= "AKIAU7KX6KHGZ2DXZDYH" 
+	secret_key 	= "HKYXUtxniwI6Oh8c+2LLElp0A1fjCdR86jLy0Ej9"
 
 }
 
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
-# or ONLY the FIRST one??
+# or ONLY the FIRST one??-> SEEMINGLY YES!!!
 # does NOT work with OReilly SSH, Apache, EBS, Snapshot,Security Groups, Custom AMI assignment/course, lacking permissions!!
-# DOES work with ?? assignment
+# DOES work with ?? assignment 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
   bucket_name = "my_new_bucket_name_from_wrapper_call"
