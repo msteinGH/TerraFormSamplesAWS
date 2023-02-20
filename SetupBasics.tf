@@ -2,8 +2,8 @@
 provider "aws" {
 	#region 		= "us-east-1"
   region 		= "${var.region}"
-	access_key 	= "AKIAUXRM7RLSDVFHQBDJ" 
-	secret_key 	= "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"
+	access_key 	= "AKIASG4KXNTK4LGQCPX4" 
+	secret_key 	= "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"
 
 }
 
@@ -13,6 +13,9 @@ provider "aws" {
 # working again after first ACcoutn has timed out/ after 60 minutes??
 # does NOT work with OReilly SSH, Apache, EBS, Snapshot,Security Groups, Custom AMI assignment/course, lacking permissions!!
 # DOES work with ?? assignment 
+# JUST DO use new name!!
+# name has to be unique per region (AZ???)
+# sometimes STILL permissions lacking even for manual creation???
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
   bucket_name = "my_new_bucket_name_from_wrapper_call"
@@ -21,12 +24,12 @@ provider "aws" {
 
 
 # slowing down individual executions
-  module "sample_ec2_instances_with_user_data" {
-  source = "./Modules/EC2"
-  subnet = aws_subnet.tf-generic-subnet.id
-  security_group = aws_security_group.tf-allow-ssh.id
-  key_name = "tf-generic-user-key"
-}
+#  module "sample_ec2_instances_with_user_data" {
+#  source = "./Modules/EC2"
+#  subnet = aws_subnet.tf-generic-subnet.id
+#  security_group = aws_security_group.tf-allow-ssh.id
+#  key_name = "tf-generic-user-key"
+#}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
