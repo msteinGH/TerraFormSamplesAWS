@@ -1,4 +1,12 @@
 
+# do need to have credentials file ~/.aws/credentials set up via aws cli
+# aws configure
+# or edit manually:
+#
+# [default]
+# aws_secret_access_key = XXX
+# aws_access_key_id = YYY
+
 provider "aws" {
 	#region 		= "us-east-1"
     region 		= "${var.region}"
