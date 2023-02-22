@@ -1,6 +1,6 @@
 <html>
 <body>
-    <h1>Hello World from newly deployed Tomcat</h1>
+    <h1>Hello World from newly deployed Server</h1>
 </body>
 
 </html>

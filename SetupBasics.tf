@@ -9,9 +9,13 @@ provider "aws" {
 
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
-# or ONLY the FIRST one??
+# or ONLY the FIRST one??-> SEEMINGLY YES!!!
+# working again after first ACcoutn has timed out/ after 60 minutes??
 # does NOT work with OReilly SSH, Apache, EBS, Snapshot,Security Groups, Custom AMI assignment/course, lacking permissions!!
-# DOES work with ?? assignment
+# DOES work with ?? assignment 
+# JUST DO use new name!!
+# name has to be unique per region (AZ???)
+# sometimes STILL permissions lacking even for manual creation???
 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
@@ -21,12 +25,12 @@ provider "aws" {
 
 
 # slowing down individual executions
-  module "sample_ec2_instances_with_user_data" {
-  source = "./Modules/EC2"
-  subnet = aws_subnet.tf-generic-subnet.id
-  security_group = aws_security_group.tf-allow-ssh.id
-  key_name = "tf-generic-user-key"
-}
+#  module "sample_ec2_instances_with_user_data" {
+#  source = "./Modules/EC2"
+#  subnet = aws_subnet.tf-generic-subnet.id
+#  security_group = aws_security_group.tf-allow-ssh.id
+#  key_name = "tf-generic-user-key"
+#}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
