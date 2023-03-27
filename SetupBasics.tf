@@ -10,7 +10,7 @@
 provider "aws" {
 	#region 		= "us-east-1"
     region 		= "${var.region}"
-    shared_credentials_file = "~/.aws/credentials"
+    shared_credentials_files = ["~/.aws/credentials"]
 }
 
 
@@ -27,22 +27,22 @@ provider "aws" {
 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
-  bucket_name = "my_new_bucket_name_from_wrapper_calls"
+  bucket_name = "my_tf_bucket_name_from_wrapper_call2"
 }
 
 
 
 # slowing down individual executions
-#  module "sample_ec2_instances_with_user_data" {
-#  source = "./Modules/EC2"
-#  subnet = aws_subnet.tf-generic-subnet.id
-#  security_group = aws_security_group.tf-allow-ssh.id
-#  key_name = "tf-generic-user-key"
-#}
+  module "sample_ec2_instances_with_user_data" {
+  source = "./Modules/EC2"
+  subnet = aws_subnet.tf-generic-subnet.id
+  security_group = aws_security_group.tf-allow-ssh.id
+  key_name = "tf-generic-user-key"
+}
 
 resource "aws_key_pair" "tf-generic-user-key" {
   key_name   = "tf-generic-user-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArt3ogLZPTxqC8AnyHmh+8fdDD0fqRLoW9p0G066ZTWSpDgOtf1gz9t2CUvzhzThtmSC7INMNV44NQho7AkuU6JuV7m/JC1qcqpqDM38k0+dFvrnKvVozOKZbTwfGeNNCaeC4GEdiCanyBIfK5JfaTCiHQQSS125HXo5nPpVhMQ3nfuYNFjtYDaPueclWKs3+O9F4ukGWZ+YAYDmUtbMBJJ+nonSyAcBqAYX+P+DWimNs56Dkf1LcSqoLZrs+AH71Z9EEdC1V7OXESoNEQObU4k71hhf0dA5f8XBF3JPI3esVYiHXqOWtgv3WzGTW2yyy7ZV+ir5Y66Xl8bGpkoXH7w=="
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAp62kAHeRBzDaz8QpqdhIlvgPtnOVx2q1v2nGnYwYdVRlrWUIL8B3NyvCAwebu/T2+QXjTphfOXfd8z5gExxXnjuv/ECUILVjxuzwM3eC9C1YGCVekPObY8HqjvhNvpdz/sZpU3FgXi8mj9JN2+li+tgPZfejyhuzCXJrYICQ/x6iV2sxD7Rlwd4ALSQoaHO+/x72FimkfidtSawxRJszghY38+TVd3yi2SPBCd36MQtYPqHxj1GuLQmG+VrYXvdndTcf56mHCqsWIxSeJMtFEXjbP3eDjHku12hZqp+Vyt4bNh9kK6IV/dPPLCXeyew7gIz6jFk4UJBABsHc95+6BQ=="
 }
 
 

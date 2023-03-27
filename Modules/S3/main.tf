@@ -2,7 +2,7 @@
 
 # create an S3 bucket 
 resource "aws_s3_bucket" "tf-my-first-aws-s3-bucketa" {
-  bucket = "tf-my-first-aws-s3-bucketa"
+  bucket = "${var.bucket_name}"
   tags = {
     Name = "${var.bucket_name}"
   }

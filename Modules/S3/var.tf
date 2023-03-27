@@ -1,4 +1,4 @@
 variable "bucket_name" {
 
-    default = "mynewtestbucketdefaultname"
+    default = "defaultbucketnamefromvars"
 }
