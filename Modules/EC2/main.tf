@@ -2,14 +2,11 @@
 
 # working fine, incl. SSH access, java installation via user_data
  resource "aws_instance" "my-first-tf-instance-with-ssh-user-data-file" {
-
 	ami = "ami-0b5eea76982371e91" 
 	instance_type = "t2.micro"
 	key_name = "${var.key_name}"
- subnet_id = "${var.subnet}"
- #aws_subnet.tf-generic-subnet.id
- security_groups = ["${var.security_group}"]
- #[aws_security_group.tf-allow-ssh.id]
+  subnet_id = "${var.subnet}"
+  security_groups = "${var.security_groups}"
 	associate_public_ip_address = "true"
   user_data = "${file("user_data.sh")}"
 	tags = {
@@ -40,9 +37,8 @@ resource "aws_instance" "my-first-tf-instance-user-data" {
 	instance_type = "t2.micro"
   key_name = "${var.key_name}"
    subnet_id = "${var.subnet}"
-   security_groups = ["${var.security_group}"]
+   security_groups = "${var.security_groups}"
   #subnet_id = aws_subnet.tf-generic-subnet.id
-  #security_groups = [aws_security_group.tf-allow-ssh.id]
 	associate_public_ip_address = "true"
   # yum mmay fail if outbound http(s) calls are restricted via security group!!!
   user_data = <<-EOF

@@ -1,7 +1,7 @@
 
 
 variable "subnet" {}
-variable "security_group" {}
+variable "security_groups" {}
 variable "key_name" {}
 
 
