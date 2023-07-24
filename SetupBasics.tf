@@ -92,7 +92,7 @@ resource "aws_route_table_association" "tf-my-route-table-association" {
  route_table_id = aws_route_table.tf-my-route-table.id
 }
 
-# create security group inbound via HTTP port 8080
+# create security group inbound via HTTP port 8080/8081
 resource "aws_security_group" "tf-allow-tcp-8080" {
   name        = "tf-allow-tcp-8080"
   description = "Allow ALL TCP on port 8080 inbound traffic"
@@ -101,7 +101,7 @@ resource "aws_security_group" "tf-allow-tcp-8080" {
   ingress {
     description      = "HTTP from 8080"
     from_port        = 8080
-    to_port          = 8080
+    to_port          = 8081
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
