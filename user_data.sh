@@ -1,9 +1,9 @@
  #!/bin/bash
  # installing docker, tomcat,Java
  sudo yum update -y
- sudo yum install -y docker.x86_64
 
  #############Docker install and config
+ sudo yum install -y docker.x86_64
  sudo service docker start
  ## alloow ec2-user to run docker commanbds
  sudo usermod -aG docker ec2-user
@@ -15,8 +15,15 @@
  docker run -p8081:8080 --name mytomcat -d tomcat
  ## calling IP_ADDRESS:8081/ from the internet should result in tomcat 404 error page
  
-
+ 
  ############## end of Docker
+
+ ## python3 already pre-installed
+ ## sudo yum install python3
+ ## D/L and install pip as user/in home ./local/
+ cd /tmp
+ curl -O https://bootstrap.pypa.io/get-pip.py
+ python3 get-pip.py --user
 
  sudo yum install -y java-1.8.0-openjdk.x86_64
  sudo yum install -y tomcat.noarch

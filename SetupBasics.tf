@@ -18,7 +18,6 @@ resource "aws_key_pair" "tf-generic-user-key" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAp62kAHeRBzDaz8QpqdhIlvgPtnOVx2q1v2nGnYwYdVRlrWUIL8B3NyvCAwebu/T2+QXjTphfOXfd8z5gExxXnjuv/ECUILVjxuzwM3eC9C1YGCVekPObY8HqjvhNvpdz/sZpU3FgXi8mj9JN2+li+tgPZfejyhuzCXJrYICQ/x6iV2sxD7Rlwd4ALSQoaHO+/x72FimkfidtSawxRJszghY38+TVd3yi2SPBCd36MQtYPqHxj1GuLQmG+VrYXvdndTcf56mHCqsWIxSeJMtFEXjbP3eDjHku12hZqp+Vyt4bNh9kK6IV/dPPLCXeyew7gIz6jFk4UJBABsHc95+6BQ=="
 }
 
-
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
 # or ONLY the FIRST one??-> SEEMINGLY YES!!!
@@ -28,10 +27,12 @@ resource "aws_key_pair" "tf-generic-user-key" {
 # JUST DO use new name!!
 # name has to be unique per region (AZ???)
 # sometimes STILL permissions lacking even for manual creation???
+# naming conventions at https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+# no underscores, jsut hyphens etc.
 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
-  bucket_name = "my_tf_bucket_name_from_wrapper_call2"
+  bucket_name = "my-tf-bucket-name-from-wrapper-call2"
 }
 
 
@@ -42,7 +43,7 @@ resource "aws_key_pair" "tf-generic-user-key" {
   module "sample_ec2_instances_with_user_data" {
   source = "./Modules/EC2"
   subnet = aws_subnet.tf-generic-subnet.id
-  security_groups = [aws_security_group.tf-allow-tcp-8080.id,aws_security_group.tf-allow-ssh.id]
+  security_groups = [aws_security_group.tf-allow-tcp-8080-8081.id,aws_security_group.tf-allow-ssh.id]
   key_name = "tf-generic-user-key"
 }
 
@@ -93,7 +94,7 @@ resource "aws_route_table_association" "tf-my-route-table-association" {
 }
 
 # create security group inbound via HTTP port 8080/8081
-resource "aws_security_group" "tf-allow-tcp-8080" {
+resource "aws_security_group" "tf-allow-tcp-8080-8081" {
   name        = "tf-allow-tcp-8080"
   description = "Allow ALL TCP on port 8080 inbound traffic"
   vpc_id      = aws_vpc.tf-generic-vpc.id
