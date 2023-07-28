@@ -171,8 +171,6 @@ resource "aws_instance" "my-first-tf-instance" {
 }
 
 
-
-
 # TODOS
 # PARAMETERIZE   
 # password/certificate reomval??
