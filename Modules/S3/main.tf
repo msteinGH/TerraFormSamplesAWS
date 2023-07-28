@@ -10,7 +10,6 @@ resource "aws_s3_bucket" "tf-my-first-aws-s3-bucket" {
 
 
 ## acl sometimes not allowed when using OReilly
-
 resource "aws_s3_bucket_acl" "tf-my-first-aws_s3_bucket_acl" {
   bucket = aws_s3_bucket.tf-my-first-aws-s3-bucket.id
   # acl    = "private"
@@ -38,6 +37,7 @@ resource "aws_s3_object" "tf-my-test-upload-folder-name" {
     key    = "tf-my-test-upload-folder-name/"
     # content_type seemingly irrelevant 
     # trailing "/" seems to be sole indicator to create a folder
+    # in fact no REAL folder as S3 does not have a folder concept it seems
     # content_type = "application/x-directory"
 }
 

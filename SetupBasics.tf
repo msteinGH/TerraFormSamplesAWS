@@ -139,11 +139,6 @@ resource "aws_security_group" "tf-allow-ssh" {
   # outbound ALL protocols alllowed
   # make sure to be able to reach amazon and other repos for package installations 
   egress {
-    #from_port        = 22
-    #to_port          = 22
-    #protocol         = "tcp"
-    #cidr_blocks      = ["0.0.0.0/0"]
-    
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -158,7 +153,6 @@ resource "aws_security_group" "tf-allow-ssh" {
 
 
 # set up EC2 instance
-# WORKING!!
 resource "aws_instance" "my-first-tf-instance" {
 
 	ami = "ami-0b5eea76982371e91" 
@@ -192,7 +186,6 @@ resource "aws_instance" "my-first-tf-instance" {
 # -- access from 
 # setup IAM user and roles and groups
 # -- difference role group permission
-# have webapp D/L from GitHub and deployed into Tomcat  
 # check autoscaling ECS, EKS
 # https://www.reddit.com/r/aws/comments/mqbcg3/difference_between_eks_ecs_and_autoscaling_for_a/
 # check EKS not from oreilly
@@ -208,9 +201,6 @@ resource "aws_instance" "my-first-tf-instance" {
 # https://www.mediafire.com/file/xq9r937nnsg9qqt/Memory.zip/file 
 # 
 # -- test locally first, same with DB connection
-# check which packages generally available via yum
-# - Terraform???? makes sense?
-# - Ansible??
 # access other services
 # - Free RDS(?))
 # -- NOPE not from OReilly
@@ -226,10 +216,5 @@ resource "aws_instance" "my-first-tf-instance" {
 # -- free??
 # checkout DDOS Protections
 # checkout Route53 
-# GIT / GITHub
-# - Pull Requests
-# - branches
-# - different users
-# - create Repo for downloading stuff
-# -- with credentials? D/L user?
+
 
