@@ -31,7 +31,7 @@ resource "aws_key_pair" "tf-generic-user-key" {
 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
-  bucket_name = "my_tf_bucket_name_from_wrapper_call2"
+  bucket_name = "my-tf-bucket-name-from-wrapper-call2"
 }
 
 

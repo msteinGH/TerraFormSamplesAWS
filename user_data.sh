@@ -29,6 +29,8 @@
   curl https://raw.githubusercontent.com/msteinGH/TerraFormSamplesAWS/main/SampleData/StaticHtml/index.jsp >> index.jsp 
   chgrp tomcat index.jsp 
   /usr/sbin/tomcat start
+  ## calling IP_ADDRESS:8080/test from the internet should result in tomcat returning downloaded "HelloWorld" index.jsp
+
   exit
   
 
