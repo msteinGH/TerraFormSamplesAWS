@@ -18,7 +18,6 @@ resource "aws_key_pair" "tf-generic-user-key" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAp62kAHeRBzDaz8QpqdhIlvgPtnOVx2q1v2nGnYwYdVRlrWUIL8B3NyvCAwebu/T2+QXjTphfOXfd8z5gExxXnjuv/ECUILVjxuzwM3eC9C1YGCVekPObY8HqjvhNvpdz/sZpU3FgXi8mj9JN2+li+tgPZfejyhuzCXJrYICQ/x6iV2sxD7Rlwd4ALSQoaHO+/x72FimkfidtSawxRJszghY38+TVd3yi2SPBCd36MQtYPqHxj1GuLQmG+VrYXvdndTcf56mHCqsWIxSeJMtFEXjbP3eDjHku12hZqp+Vyt4bNh9kK6IV/dPPLCXeyew7gIz6jFk4UJBABsHc95+6BQ=="
 }
 
-
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
 # or ONLY the FIRST one??-> SEEMINGLY YES!!!
@@ -28,6 +27,8 @@ resource "aws_key_pair" "tf-generic-user-key" {
 # JUST DO use new name!!
 # name has to be unique per region (AZ???)
 # sometimes STILL permissions lacking even for manual creation???
+# naming conventions at https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+# no underscores, jsut hyphens etc.
 
   module "sample_s3_bucket_with_uploaded_data" {
   source = "./Modules/S3"
@@ -42,7 +43,7 @@ resource "aws_key_pair" "tf-generic-user-key" {
   module "sample_ec2_instances_with_user_data" {
   source = "./Modules/EC2"
   subnet = aws_subnet.tf-generic-subnet.id
-  security_groups = [aws_security_group.tf-allow-tcp-8080.id,aws_security_group.tf-allow-ssh.id]
+  security_groups = [aws_security_group.tf-allow-tcp-8080-8081.id,aws_security_group.tf-allow-ssh.id]
   key_name = "tf-generic-user-key"
 }
 
@@ -93,7 +94,7 @@ resource "aws_route_table_association" "tf-my-route-table-association" {
 }
 
 # create security group inbound via HTTP port 8080/8081
-resource "aws_security_group" "tf-allow-tcp-8080" {
+resource "aws_security_group" "tf-allow-tcp-8080-8081" {
   name        = "tf-allow-tcp-8080"
   description = "Allow ALL TCP on port 8080 inbound traffic"
   vpc_id      = aws_vpc.tf-generic-vpc.id
@@ -138,11 +139,6 @@ resource "aws_security_group" "tf-allow-ssh" {
   # outbound ALL protocols alllowed
   # make sure to be able to reach amazon and other repos for package installations 
   egress {
-    #from_port        = 22
-    #to_port          = 22
-    #protocol         = "tcp"
-    #cidr_blocks      = ["0.0.0.0/0"]
-    
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -157,7 +153,6 @@ resource "aws_security_group" "tf-allow-ssh" {
 
 
 # set up EC2 instance
-# WORKING!!
 resource "aws_instance" "my-first-tf-instance" {
 
 	ami = "ami-0b5eea76982371e91" 
@@ -189,7 +184,6 @@ resource "aws_instance" "my-first-tf-instance" {
 # -- access from 
 # setup IAM user and roles and groups
 # -- difference role group permission
-# have webapp D/L from GitHub and deployed into Tomcat  
 # check autoscaling ECS, EKS
 # https://www.reddit.com/r/aws/comments/mqbcg3/difference_between_eks_ecs_and_autoscaling_for_a/
 # check EKS not from oreilly
@@ -205,9 +199,6 @@ resource "aws_instance" "my-first-tf-instance" {
 # https://www.mediafire.com/file/xq9r937nnsg9qqt/Memory.zip/file 
 # 
 # -- test locally first, same with DB connection
-# check which packages generally available via yum
-# - Terraform???? makes sense?
-# - Ansible??
 # access other services
 # - Free RDS(?))
 # -- NOPE not from OReilly
@@ -223,10 +214,5 @@ resource "aws_instance" "my-first-tf-instance" {
 # -- free??
 # checkout DDOS Protections
 # checkout Route53 
-# GIT / GITHub
-# - Pull Requests
-# - branches
-# - different users
-# - create Repo for downloading stuff
-# -- with credentials? D/L user?
+
 
