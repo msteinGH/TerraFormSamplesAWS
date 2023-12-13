@@ -5,7 +5,7 @@
  #############Docker install and config
  sudo yum install -y docker.x86_64
  sudo service docker start
- ## alloow ec2-user to run docker commanbds
+ ## allow ec2-user to run docker commanbds
  sudo usermod -aG docker ec2-user
  sudo su - ec2-user
  ## D/L and start tomcat image
