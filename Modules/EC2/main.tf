@@ -9,6 +9,8 @@
   security_groups = "${var.security_groups}"
 	associate_public_ip_address = "true"
   user_data = "${file("user_data.sh")}"
+  # can also use userdata from template file 
+	# user_data = "${data.template_file.user_data.rendered}"
 	tags = {
 		Name = "my-first-tf-instance-with-ssh-user-data-file"
 	}
