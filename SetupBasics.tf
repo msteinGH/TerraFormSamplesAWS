@@ -18,6 +18,47 @@ resource "aws_key_pair" "tf-generic-user-key" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAp62kAHeRBzDaz8QpqdhIlvgPtnOVx2q1v2nGnYwYdVRlrWUIL8B3NyvCAwebu/T2+QXjTphfOXfd8z5gExxXnjuv/ECUILVjxuzwM3eC9C1YGCVekPObY8HqjvhNvpdz/sZpU3FgXi8mj9JN2+li+tgPZfejyhuzCXJrYICQ/x6iV2sxD7Rlwd4ALSQoaHO+/x72FimkfidtSawxRJszghY38+TVd3yi2SPBCd36MQtYPqHxj1GuLQmG+VrYXvdndTcf56mHCqsWIxSeJMtFEXjbP3eDjHku12hZqp+Vyt4bNh9kK6IV/dPPLCXeyew7gIz6jFk4UJBABsHc95+6BQ=="
 }
 
+
+
+# get GIT_TOKEN from script output (could also be used to read environment variables)
+# expecting .bat file on PATH, executable, returning GIT_TOKEN in JSON format, e.g.
+# #####################################################################
+# @echo off
+# echo  { "TF_GIT_TOKEN" : "ghp_XXXX_my_git_token" }
+# #####################################################################
+data "external" "env" {
+  program = ["get_git_token.bat"]
+}
+
+# Print ALL values from externally read in variables/environment variables
+#output "env" {
+#  value = data.external.env.result
+#}
+
+# This prints value of "TF_GIT_TOKEN""
+# output "git_token" {
+#  value = data.external.env.result["TF_GIT_TOKEN"]
+#}
+
+
+# prepare template file by filling in value for git token
+# replacing ${git_token} by values read in via external data above, i.e. script file output
+data "template_file" "user_data" {
+  template = "${file("user_data.sh")}"
+
+  vars = {
+    git_token = data.external.env.result["TF_GIT_TOKEN"]
+  }
+}
+
+# debug templatefile
+resource "null_resource" "example" {
+  triggers = {
+    json = "${data.template_file.user_data.rendered}"
+  }
+}
+
+
 # S3 bucket samples
 # WORKING with Basic Linux VM Oreilly example 
 # or ONLY the FIRST one??-> SEEMINGLY YES!!!
