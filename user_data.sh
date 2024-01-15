@@ -1,5 +1,10 @@
  #!/bin/bash
  # installing docker, tomcat,Java
+ # sudo seemingly NOT required!!
+ # logs and output stored at 
+ # /var/log/cloud-init.log
+ # /var/log/cloud-init-output.log
+ 
  sudo yum update -y
 
  #############Docker install and config
