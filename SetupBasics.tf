@@ -211,6 +211,24 @@ resource "aws_instance" "my-first-tf-instance" {
 	}
 }
 
+# create ebs volume for extended storage
+resource "aws_ebs_volume" "python-venv-ebs-volume" {
+  availability_zone = "${var.availability_zone}"
+  # size in GB
+  size       = 100
+  tags = {
+    Name = "tf-python-venv-ebs-volume"
+  }
+}
+
+# attach ebs volume to ec2 instance via ID
+# needs to be mounted, maybe via user data script -> see AWS AI Setup
+resource "aws_volume_attachment" "python-venv-ebs-volume-attachment" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.python-venv-ebs-volume.id
+  instance_id = aws_instance.my-first-tf-instance.id
+}
+
 
 # TODOS
 # PARAMETERIZE   
